@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Client for the DataDecks game",
   "main": "index.js",
+  "scripts": {
+    "prepublish": "gulp build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arcton/DataDecks-Client.git"
