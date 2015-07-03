@@ -1,0 +1,24 @@
+{
+  "name": "datadeck-client",
+  "version": "0.0.1",
+  "description": "Client for the DataDecks game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arcton/DataDecks-Client.git"
+  },
+  "author": "Arcton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Arcton/DataDecks-Client/issues"
+  },
+  "homepage": "https://github.com/Arcton/DataDecks-Client#readme",
+  "devDependencies": {
+    "bower": "^1.4.1",
+    "gulp": "^3.9.0",
+    "gulp-sass": "^2.0.3"
+  }
+}
