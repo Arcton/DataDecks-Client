@@ -16,7 +16,7 @@
                     <i class="material-icons circle green">play_arrow</i>
                     <span class="title">Play Game</span>
                 </a>
-                <a href="javascript:void(0)" id="menu-help" class="collection-item avatar">
+                <a href="#helpModal" class="collection-item avatar modal-trigger">
                     <i class="material-icons circle">live_help</i>
                     <span class="title">How to play</span>
                 </a>
@@ -25,11 +25,47 @@
 
         <script id="deck-list-template" type="text/html">
             <div class="collection" id="deck-list">
+                <div class="collection-header"><h4>Select Card Deck</h4></div>
                 <a href="javascript:void(0)" class="collection-item" rv-each-deck="decks.decks">
                     <span class="title" rv-on-click="decks.onSelected">{ deck.name }</span>
                 </a>
             </div>
         </script>
+        <nav>
+            <div class="nav-wrapper">
+            <a href="#" class="brand-logo">DataDecks</a>
+            <ul id="nav-mobile" class="right">
+                <li><a class="modal-trigger" href="#aboutModal">About</a></li>
+            </ul>
+            </div>
+        </nav>
+
+        <!-- Modal Structure -->
+        <div id="aboutModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>About</h4>
+                <p>
+                    Created as part of GovHack 2015 by <a href="https://github.com/Arcton" target="_blank">Arcton</a>, from Hamilton, New Zealand.
+                    Data from <a href="http://stats.govt.nz">Statistics New Zealand</a> used under a CC-BY-3.0 NZ license.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+
+        <div id="helpModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>How to play</h4>
+                <p>
+                    Welcome to DataDecks!
+                    Rules are coming soon. For now, explore the game and have fun!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
 
         <div id="main">
 

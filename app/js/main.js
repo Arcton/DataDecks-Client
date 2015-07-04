@@ -2,6 +2,8 @@ $(function() {
     console.log("main");
     setup();
     showMenu();
+
+    $('.modal-trigger').leanModal();
 });
 
 rivets.configure({
@@ -86,6 +88,8 @@ function connect(server) {
 
         socket.onclose = function() {
                 console.log("socket closed");
+                showMenu();
+                game = null;
         };
 
         return socket;
