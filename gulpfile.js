@@ -53,7 +53,7 @@ gulp.task('scripts', function() {
   config.bowerDir + '/materialize/dist/js/materialize.min.js',
   config.bowerDir + '/sightglass/index.js',
   config.bowerDir + '/rivets/dist/rivets.min.js',
-  './js/**/*.js'])
+  config.srcPath + '/js/**/*.js'])
       .pipe(concat('main.js'))
       .pipe(gulp.dest(config.destPath));
 });

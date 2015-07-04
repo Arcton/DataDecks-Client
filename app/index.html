@@ -4,22 +4,35 @@
         <meta charset="UTF-8">
         <title>DataDecks</title>
         <link type="text/css" rel="stylesheet" href="css/style.css"  media="screen,projection"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script type="text/javascript" src="main.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-          <div class="row">
-            <div class="col s12">
-              <div class="card">
-                <div class="card-image">
-                    <img src="https://placeimg.com/480/240/nature">
-                    <span class="card-title">Hamilton City<span>
-                </div>
-                <div class="card-action">
-                    <a href="#">Play Card</a>
-                </div>
-              </div>
+        <!-- TEMPLATES for rivets.js -->
+        <script id="menu-template" type="text/html">
+            <div class="collection">
+                <a href="javascript:void(0)" id="menu-start" class="collection-item avatar">
+                    <i class="material-icons circle green">play_arrow</i>
+                    <span class="title">Play Game</span>
+                </a>
+                <a href="javascript:void(0)" id="menu-help" class="collection-item avatar">
+                    <i class="material-icons circle">live_help</i>
+                    <span class="title">How to play</span>
+                </a>
             </div>
-          </div>
+        </script>
+
+        <script id="deck-list-template" type="text/html">
+            <div class="collection" id="deck-list">
+                <a href="javascript:void(0)" class="collection-item" rv-each-deck="decks.decks">
+                    <span class="title" rv-on-click="decks.onSelected">{ deck.name }</span>
+                </a>
+            </div>
+        </script>
+
+        <div id="main">
+
+        </div>
     </body>
 </html>
