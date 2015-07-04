@@ -44,7 +44,8 @@ var ui = {
     menu: null,
     lobby: null,
     deckList: null,
-    gameScreen: null
+    gameScreen: null,
+    scoreDisplay: null
 }
 
 /*################
@@ -57,10 +58,14 @@ function Game(socket) {
     this.socket = socket;
     this.state = Game.states.PRESTART;
 
+    this.playerId;
+    this._score = 0;
+
     this.decks;
     this.activeDeck;
 
     this.activeCategory;
+    this.highGood;
 
     this.pickingCat = false;
     this.waitingCat = true;
@@ -70,6 +75,11 @@ function Game(socket) {
     this._hand = [];
 
     var self = this;
+
+    this.setScore = function(score) {
+        this._score = score;
+        ui.scoreDisplay.text(score);
+    }
 
     this.addCard = function(card) {
         this._hand.push(card);
@@ -106,11 +116,13 @@ function Game(socket) {
         }));
     }
 
-    this.setCategory = function(catId) {
+    this.setCategory = function(catId, highGood) {
         for (var i = 0; i < this.activeDeck.categories.length; i++) {
 
             if (this.activeDeck.categories[i].id === catId) {
                 this.activeCategory = self.activeDeck.categories[i];
+                this.highGood = highGood;
+                $('#winnerRoundModal').closeModal(); // incase the user is still sitting in the previous winner notif.
                 break;
             }
         }
@@ -206,6 +218,7 @@ function setup() {
     ui.lobby = $('#lobby-template');
     ui.deckList = $('#deck-list-template');
     ui.gameScreen = $('#game-screen-template');
+    ui.scoreDisplay = $('#score');
 }
 
 function connect(server) {
@@ -226,6 +239,17 @@ function connect(server) {
                     // A list of the playable decks
                     if (window.game.state === Game.states.PRESTART) {
                         showDecks(data.data);
+                    }
+                    break;
+                case "player":
+                    // The player's ID
+                    window.game.playerId = data.id;
+                    window.game.setScore(0);
+                    break;
+                case "score":
+                    // The winner of the round
+                    if (window.game.playerId === data.player) {
+                        window.game.setScore(data.score);
                     }
                     break;
                 case "card":
@@ -249,7 +273,16 @@ function connect(server) {
                 case "category":
                     // A category has been chosen
                     if (window.game.state === Game.states.PLAYING) {
-                        window.game.setCategory(data.value); // cat id
+                        window.game.setCategory(data.value, data.high_good); // value is cat id
+                    }
+
+                    break;
+                case "reveal":
+                    // A winner has been decided
+                    if (window.game.state === Game.states.PLAYING) {
+                        showRoundWinner(data.cards); // cat id
+                        window.game.activeCategory = -1;
+                        window.game.waitingCat = true;
                     }
 
                     break;
@@ -274,6 +307,8 @@ function connect(server) {
 function showMenu() {
     ui.main.html(ui.menu.html());
     ui.main.find("#menu-start").on("click", startGame);
+
+    document.body.classList.add("menu");
 }
 
 /**
@@ -297,6 +332,8 @@ function showLobby() {
         });
 
         window.game.state = Game.states.LOBBY;
+
+        document.body.classList.remove("menu");
     }
 }
 
@@ -327,4 +364,66 @@ function showGame() {
 
         window.game.state = Game.states.PLAYING;
     }
+}
+
+/**
+ * Shows the details of who won a round
+ * @param  {array} cards All the cards that were played
+ */
+function showRoundWinner(cards) {
+    var modal = document.getElementById('winnerRoundModal');
+    var table = document.getElementById('results-table');
+
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
+
+    var best = 0;
+
+    if (window.game.highGood) {
+        $.each(cards, function(key, card) {
+            var val = parseFloat(card.value);
+            if (val >= best) best = val;
+        });
+    } else {
+        $.each(cards, function(key, card) {
+            var val = parseFloat(card.value);
+            if (val <= best) best = val;
+        });
+    }
+
+    var thead = document.createElement("thead");
+    var thr = document.createElement("tr");
+    var nameTh = document.createElement("th");
+    nameTh.innerHTML = "Card";
+    var valueTh = document.createElement("th");
+    valueTh.innerHTML = window.game.activeCategory.name;
+
+    thr.appendChild(nameTh);
+    thr.appendChild(valueTh);
+    thead.appendChild(thr);
+    table.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+
+    $.each(cards, function(key, card) {
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+
+        td1.innerHTML = card.name;
+        td2.innerHTML = card.value;
+
+        if (parseFloat(card.value) == best) {
+            tr.classList.add('winner');
+        }
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+
+    $(modal).openModal();
 }

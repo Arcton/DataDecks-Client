@@ -15,3 +15,23 @@
 .italics {
     font-style: italic;
 }
+
+.score {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+
+    position: absolute;
+    display: inline-block;
+    padding: 0;
+    white-space: nowrap;
+
+    font-size: 1.2em;
+}
+
+.menu .score {
+    display: none;
+}

@@ -73,7 +73,10 @@
 
         <nav>
             <div class="nav-wrapper">
-            <a href="#exitModal" class="modal-trigger brand-logo">DataDecks</a>
+            <ul id="nav-mobile" class="left">
+                <li><a href="#exitModal" class="modal-trigger">Home</a></li>
+            </ul>
+            <span class="score">Score: <span id="score"></span></span>
             <ul id="nav-mobile" class="right">
                 <li><a class="modal-trigger" href="#aboutModal">About</a></li>
             </ul>
@@ -117,6 +120,19 @@
             <div class="modal-footer">
                 <a href="javascript:document.location.reload()" class="modal-action modal-close waves-effect waves-green btn-flat">Exit to menu</a>
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+
+        <div id="winnerRoundModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Round Over</h4>
+
+                <table class="results" id="results-table">
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Continue</a>
             </div>
         </div>
 

@@ -5,3 +5,7 @@
 .disabled, .disabled * {
     pointer-events: none;
 }
+
+.results .winner {
+    @extend .light-green;
+}
