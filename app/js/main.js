@@ -23,6 +23,10 @@ rivets.configure({
 
 });
 
+rivets.formatters.prettyCat = function(val) {
+    return val.replace(/_/g, " ");
+}
+
 var game = null;
 
 var ui = {
@@ -30,7 +34,8 @@ var ui = {
     main: null,
     menu: null,
     lobby: null,
-    deckList: null
+    deckList: null,
+    gameScreen: null
 }
 
 // used to hold state and details of the current game
@@ -38,13 +43,42 @@ function Game(socket) {
     this.socket = socket;
     this.state = Game.states.PRESTART;
 
-    this.decks = null;
+    this.decks;
+    this.activeDeck;
+
+    this.pickingCat = false;
+    this.pickingCard = false;
+
+    this._hand = [];
+
+    this.addCard = function(card) {
+        this._hand.push(card);
+    }
+
+    this.removeCard = function(cardId) {
+        for (var i = 0; i < this._hand.length; i++) {
+            if (this._hand[i].id === cardId) {
+                this._hand.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    this.startCatPick = function() {
+        this.pickingCat = true;
+    }
+
+    this.startCardPick = function() {
+        this.pickingCat = false;
+        this.pickingCard = true;
+    }
 }
 
 Game.states = {
     PRESTART: 0,
     DECKLIST: 1,
-    LOBBY: 2
+    LOBBY: 2,
+    PLAYING: 3
 }
 
 function Decks(deckArray) {
@@ -57,8 +91,14 @@ function Decks(deckArray) {
 
         game.socket.send(JSON.stringify({ id: deckId }));
 
+        game.activeDeck = model.deck;
         showLobby();
     }
+}
+
+function Card(name, id) {
+    this.name = name;
+    this.id = id;
 }
 
 /**
@@ -69,6 +109,7 @@ function setup() {
     ui.menu = $('#menu-template');
     ui.lobby = $('#lobby-template');
     ui.deckList = $('#deck-list-template');
+    ui.gameScreen = $('#game-screen-template');
 }
 
 function connect(server) {
@@ -89,6 +130,22 @@ function connect(server) {
                     if (window.game.state === Game.states.PRESTART) {
                         showDecks(data.data);
                     }
+                    break;
+                case "card":
+                    if (window.game.state === Game.states.LOBBY) {
+                        showGame();
+                    }
+
+                    if (window.game.state === Game.states.PLAYING) {
+                        window.game.addCard(new Card(data.card, data.id));
+                    }
+
+                    break;
+                case "pick_category":
+                    if (window.game.state === Game.states.PLAYING) {
+                        window.game.startCatPick();
+                    }
+
                     break;
             }
         };
@@ -149,5 +206,21 @@ function showDecks(decks) {
         rivets.bind(ui.main.find('#deck-list'), {decks: window.game.decks});
 
         window.game.state = Game.states.DECKLIST;
+    }
+}
+
+/**
+ * Shows the main game screen - a list of categories and the player's hand
+ */
+function showGame() {
+    if (window.game.state === Game.states.LOBBY) {
+
+        console.log("DECK IS:");
+        console.log(window.game.activeDeck);
+        ui.main.html(ui.gameScreen.html());
+
+        rivets.bind(ui.main.find('#game-screen'), {game: window.game, categories: window.game.activeDeck.categories});
+
+        window.game.state = Game.states.PLAYING;
     }
 }

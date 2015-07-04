@@ -23,6 +23,32 @@
             </div>
         </script>
 
+        <script id="game-screen-template" type="text/html">
+            <div id="game-screen" class="container" rv-data-pickingCat="game.pickingCat" rv-data-pickingCard="game.pickingCard">
+                <div class="collection categories" id="category-list">
+                    <li class="collection-header" rv-if="game.pickingCat"><h5>Your turn: Pick a category to play</h5></li>
+                    <li class="collection-header" rv-unless="game.pickingCat"><h5>Categories</h5><span class="italics">Waiting for opponent to pick...</span></li>
+                    <a href="javascript:void(0)" class="collection-item" rv-each-category="categories">{ category | prettyCat }</a>
+                </div>
+
+                <div class="cards">
+                    <h5>Your cards</h5>
+                    <div class="card left waves-effect waves-block waves-light" rv-each-card="game._hand">
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">{ card.name }</span>
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4">{ card.name }<i class="material-icons right">close</i></span>
+                            <p>{ card.description }</p>
+                        </div>
+                        <div class="card-action" rv-if="game.pickingCard">
+                            <a href="#">Play</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
         <script id="deck-list-template" type="text/html">
             <div class="collection" id="deck-list">
                 <div class="collection-header"><h4>Select Card Deck</h4></div>
