@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 
 var config = {
     srcPath: 'app',
-    destPath: 'build',
+    destPath: 'out',
     bowerDir: './bower_components'
 }
 

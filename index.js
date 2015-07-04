@@ -4,7 +4,7 @@ var finalhandler = require('finalhandler')
 
 var serve = function(port) {
     // Serve the built files
-    var serve = serveStatic(__dirname + '/app', {'index': ['index.html', 'index.htm']})
+    var serve = serveStatic(__dirname + '/out', {'index': ['index.html', 'index.htm']})
 
     // Create server
     var server = http.createServer(function(req, res){
