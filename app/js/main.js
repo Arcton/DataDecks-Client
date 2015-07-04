@@ -26,6 +26,14 @@ rivets.formatters.prettyCat = function(val) {
     return val.replace(/_/g, " ");
 }
 
+rivets.formatters['='] = function (value, arg) {
+  return value == arg;
+}
+
+rivets.formatters.not = function (value) {
+  return !value;
+}
+
 var game = null;
 
 var ui = {
@@ -37,6 +45,11 @@ var ui = {
     gameScreen: null
 }
 
+/*################
+## CONSTRUCTORS ##
+##################*/
+
+
 // used to hold state and details of the current game
 function Game(socket) {
     this.socket = socket;
@@ -45,8 +58,12 @@ function Game(socket) {
     this.decks;
     this.activeDeck;
 
+    this.activeCategory;
+
     this.pickingCat = false;
+    this.waitingCat = true;
     this.pickingCard = false;
+    this.waitingCard = false;
 
     this._hand = [];
 
@@ -67,17 +84,46 @@ function Game(socket) {
 
     this.startCatPick = function() {
         this.pickingCat = true;
+        this.waitingCat = false;
     }
 
     this.startCardPick = function() {
         this.pickingCat = false;
+        this.waitingCat = false;
+
+        this.waitingCard = false;
         this.pickingCard = true;
     }
 
     this.pickCategory = function(catId) {
+        window.game.pickingCat = false;
+
         self.socket.send(JSON.stringify({
             'id': catId,
             'high_good': true
+        }));
+    }
+
+    this.setCategory = function(catId) {
+        for (var i = 0; i < this.activeDeck.categories.length; i++) {
+
+            if (this.activeDeck.categories[i].id === catId) {
+                this.activeCategory = self.activeDeck.categories[i];
+                break;
+            }
+        }
+
+        this.startCardPick();
+    }
+
+    this.pickCard = function(cardId) {
+        window.game.pickingCard = false;
+        window.game.waitingCard = true;
+
+        this.removeCard(cardId);
+
+        self.socket.send(JSON.stringify({
+            'id': cardId
         }));
     }
 }
@@ -120,6 +166,10 @@ function Decks(deckArray) {
 function Card(name, id) {
     this.name = name;
     this.id = id;
+
+    this.onSelected = function(event, model) {
+        window.game.pickCard(model.card.id);
+    }
 }
 
 function Deck(name, id, categories) {
@@ -171,11 +221,13 @@ function connect(server) {
 
             switch (data.type) {
                 case "decks":
+                    // A list of the playable decks
                     if (window.game.state === Game.states.PRESTART) {
                         showDecks(data.data);
                     }
                     break;
                 case "card":
+                    // Have a card
                     if (window.game.state === Game.states.LOBBY) {
                         showGame();
                     }
@@ -186,8 +238,16 @@ function connect(server) {
 
                     break;
                 case "pick_category":
+                    // We are the lucky player who gets to pick a category
                     if (window.game.state === Game.states.PLAYING) {
                         window.game.startCatPick();
+                    }
+
+                    break;
+                case "category":
+                    // A category has been chosen
+                    if (window.game.state === Game.states.PLAYING) {
+                        window.game.setCategory(data.value); // cat id
                     }
 
                     break;
