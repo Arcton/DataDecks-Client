@@ -41,4 +41,4 @@ build/Release
 node_modules
 
 #built site
-build/
+out/

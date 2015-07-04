@@ -1,5 +1,4 @@
 $(function() {
-    console.log("main");
     setup();
     showMenu();
 
@@ -51,6 +50,8 @@ function Game(socket) {
 
     this._hand = [];
 
+    var self = this;
+
     this.addCard = function(card) {
         this._hand.push(card);
     }
@@ -72,6 +73,13 @@ function Game(socket) {
         this.pickingCat = false;
         this.pickingCard = true;
     }
+
+    this.pickCategory = function(catId) {
+        self.socket.send(JSON.stringify({
+            'id': catId,
+            'high_good': true
+        }));
+    }
 }
 
 Game.states = {
@@ -82,7 +90,20 @@ Game.states = {
 }
 
 function Decks(deckArray) {
-    this.decks = deckArray;
+
+    this.decks = [];
+
+    for (var i = 0; i < deckArray.length; i++) {
+        var d = deckArray[i];
+        var deck = new Deck(d.name, d.id);
+
+        for (var j = 0; j < d.categories.length; j++) {
+            var cat = new Category(d.categories[j], j);
+            deck.addCategory(cat); // Deck ID is its index
+        }
+
+        this.decks.push(deck);
+    }
 
     this.onSelected = function(event, model) {
         console.log("joining ");
@@ -99,6 +120,29 @@ function Decks(deckArray) {
 function Card(name, id) {
     this.name = name;
     this.id = id;
+}
+
+function Deck(name, id, categories) {
+    this.name = name;
+    this.id = id;
+    this.categories = categories;
+
+    this.addCategory = function(cat) {
+        if (!this.categories) {
+            this.categories = [];
+        }
+
+        this.categories.push(cat);
+    }
+}
+
+function Category(name, id) {
+    this.name = name;
+    this.id = id;
+
+    this.onSelected = function(event, model) {
+        window.game.pickCategory(model.category.id);
+    }
 }
 
 /**
@@ -215,8 +259,6 @@ function showDecks(decks) {
 function showGame() {
     if (window.game.state === Game.states.LOBBY) {
 
-        console.log("DECK IS:");
-        console.log(window.game.activeDeck);
         ui.main.html(ui.gameScreen.html());
 
         rivets.bind(ui.main.find('#game-screen'), {game: window.game, categories: window.game.activeDeck.categories});

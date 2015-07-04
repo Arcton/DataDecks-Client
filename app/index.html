@@ -28,7 +28,7 @@
                 <div class="collection categories" id="category-list">
                     <li class="collection-header" rv-if="game.pickingCat"><h5>Your turn: Pick a category to play</h5></li>
                     <li class="collection-header" rv-unless="game.pickingCat"><h5>Categories</h5><span class="italics">Waiting for opponent to pick...</span></li>
-                    <a href="javascript:void(0)" class="collection-item" rv-each-category="categories">{ category | prettyCat }</a>
+                    <a href="javascript:void(0)" class="collection-item" rv-each-category="categories" rv-on-click="category.onSelected">{ category.name | prettyCat }</a>
                 </div>
 
                 <div class="cards">
@@ -52,8 +52,8 @@
         <script id="deck-list-template" type="text/html">
             <div class="collection" id="deck-list">
                 <div class="collection-header"><h4>Select Card Deck</h4></div>
-                <a href="javascript:void(0)" class="collection-item" rv-each-deck="decks.decks">
-                    <span class="title" rv-on-click="decks.onSelected">{ deck.name }</span>
+                <a href="javascript:void(0)" class="collection-item" rv-each-deck="decks.decks" rv-on-click="decks.onSelected">
+                    <span class="title">{ deck.name }</span>
                 </a>
             </div>
         </script>
