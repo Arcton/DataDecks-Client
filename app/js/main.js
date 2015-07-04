@@ -5,6 +5,8 @@ $(function() {
     $('.modal-trigger').leanModal();
 });
 
+WEBSOCKET_URI = "ws://localhost:8080";
+
 rivets.configure({
 
   // Attribute prefix in templates
@@ -278,7 +280,7 @@ function showMenu() {
  * Displays the menu for selecting a deck of cards.
  */
 function startGame() {
-    var sock = connect("ws://localhost:8080");
+    var sock = connect(WEBSOCKET_URI);
     window.game = new Game(sock);
 }
 
