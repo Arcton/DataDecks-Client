@@ -29,6 +29,7 @@ var ui = {
     active: null,
     main: null,
     menu: null,
+    lobby: null,
     deckList: null
 }
 
@@ -42,16 +43,21 @@ function Game(socket) {
 
 Game.states = {
     PRESTART: 0,
-    DECKLIST: 1
+    DECKLIST: 1,
+    LOBBY: 2
 }
 
 function Decks(deckArray) {
     this.decks = deckArray;
 
     this.onSelected = function(event, model) {
+        console.log("joining ");
+
         var deckId = model.deck.id;
 
         game.socket.send(JSON.stringify({ id: deckId }));
+
+        showLobby();
     }
 }
 
@@ -61,6 +67,7 @@ function Decks(deckArray) {
 function setup() {
     ui.main = $('#main');
     ui.menu = $('#menu-template');
+    ui.lobby = $('#lobby-template');
     ui.deckList = $('#deck-list-template');
 }
 
@@ -104,7 +111,6 @@ function connect(server) {
 function showMenu() {
     ui.main.html(ui.menu.html());
     ui.main.find("#menu-start").on("click", startGame);
-    ui.main.find("#menu-help").on("click", showHelp);
 }
 
 /**
@@ -116,10 +122,19 @@ function startGame() {
 }
 
 /**
- * Shows the help menu. TODO: implement the help menu
+ * Displays the lobby screen
  */
-function showHelp() {
-    console.log("HELP!");
+function showLobby() {
+    if (window.game.state === Game.states.DECKLIST) {
+        ui.main.html(ui.lobby.html());
+        ui.main.find("#lobby-ready").on("click", function(ev) {
+            game.socket.send(JSON.stringify({ ready: true }));
+            ev.target.classList.add("disabled");
+            ev.target.innerHTML = "Waiting for players...";
+        });
+
+        window.game.state = Game.states.LOBBY;
+    }
 }
 
 /**
@@ -127,8 +142,12 @@ function showHelp() {
  * @param  {array} Array of deck objects
  */
 function showDecks(decks) {
-    window.game.decks = new Decks(decks);
+    if (window.game.state === Game.states.PRESTART) {
+        window.game.decks = new Decks(decks);
 
-    ui.main.html(ui.deckList.html());
-    rivets.bind(ui.main.find('#deck-list'), {decks: window.game.decks})
+        ui.main.html(ui.deckList.html());
+        rivets.bind(ui.main.find('#deck-list'), {decks: window.game.decks});
+
+        window.game.state = Game.states.DECKLIST;
+    }
 }

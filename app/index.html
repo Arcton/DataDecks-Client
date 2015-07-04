@@ -31,9 +31,18 @@
                 </a>
             </div>
         </script>
+
+        <script id="lobby-template" type="text/html">
+            <div class="container">
+                <div class="section center-btn">
+                    <a id="lobby-ready" class="center-align valign waves-effect waves-light btn-large">Click when ready</a>
+                </div>
+            </div>
+        </script>
+
         <nav>
             <div class="nav-wrapper">
-            <a href="#" class="brand-logo">DataDecks</a>
+            <a href="#exitModal" class="modal-trigger brand-logo">DataDecks</a>
             <ul id="nav-mobile" class="right">
                 <li><a class="modal-trigger" href="#aboutModal">About</a></li>
             </ul>
@@ -64,6 +73,19 @@
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+
+        <div id="exitModal" class="modal">
+            <div class="modal-content">
+                <h4>Exit to menu?</h4>
+                <p>
+                    If you're currently in a game, your progress will be lost!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:document.location.reload()" class="modal-action modal-close waves-effect waves-green btn-flat">Exit to menu</a>
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>
 
