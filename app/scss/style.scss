@@ -13,3 +13,10 @@
 .dd-card {
     height: auto !important;
 }
+
+.play-card {
+    text-align: center;
+    text-transform: uppercase;
+
+    @extend .teal-text;
+}

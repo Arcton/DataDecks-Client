@@ -26,7 +26,9 @@ rivets.configure({
 });
 
 rivets.formatters.prettyCat = function(val) {
-    return val.replace(/_/g, " ");
+    if (val !== undefined) {
+        return val.replace(/_/g, " ");
+    }
 }
 
 rivets.formatters['='] = function (value, arg) {
@@ -297,6 +299,8 @@ function connect(server) {
                         showRoundWinner(data.cards); // cat id
                         window.game.activeCategory = -1;
                         window.game.waitingCat = true;
+                        window.game.waitingCard = false;
+                        window.game.pickingCard = false;
                     }
 
                     break;
@@ -443,7 +447,7 @@ function showRoundWinner(cards) {
 
         if (parseFloat(card.value) == best) {
             tr.classList.add('winner');
-            td2.innerHTML += "<i class='tiny material-icons'>stars</i>"
+            td2.innerHTML += "<span class='badge'><i class='tiny material-icons'>stars</i></span>"
         }
 
         tbody.appendChild(tr);

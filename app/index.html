@@ -11,15 +11,17 @@
     <body>
         <!-- TEMPLATES for rivets.js -->
         <script id="menu-template" type="text/html">
-            <div class="collection">
-                <a href="javascript:void(0)" id="menu-start" class="collection-item avatar">
-                    <i class="material-icons circle green">play_arrow</i>
-                    <span class="title">Play Game</span>
-                </a>
-                <a href="#helpModal" class="collection-item avatar modal-trigger">
-                    <i class="material-icons circle">live_help</i>
-                    <span class="title">How to play</span>
-                </a>
+            <div class="section center-btn">
+                <div class="row">
+                    <div class="section col s12">
+                        <a href="javascript:void(0)" id="menu-start" class="waves-effect waves-light btn-large"><i class="material-icons right">play_arrow</i>Play DataDecks</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="section col s12">
+                        <a href="#helpModal" class="modal-trigger waves-effect waves-light btn-flat"><i class="material-icons right">live_help</i>How to play</a>
+                    </div>
+                </div>
             </div>
         </script>
 
@@ -29,8 +31,8 @@
                 <div class="collection categories" rv-class-disabled="game.pickingCat | not" id="category-list">
                     <li class="collection-header">
                         <h5>Categories</h5>
-                        <span class="italics" rv-if="game.waitingCat">Waiting for opponent to pick...</span>
-                        <span rv-if="game.pickingCat">Your turn: Pick a category to play</span>
+                        <span class="italics pink-text" rv-if="game.waitingCat">Waiting for opponent to pick...</span>
+                        <span rv-if="game.pickingCat" class="pink-text"><i class="small material-icons">error</i>Your turn: Pick a category to play</span>
                     </li>
 
                     <a href="javascript:void(0)" class="collection-item" rv-class-active="category.id | = game.activeCategory.id" rv-each-category="categories" rv-on-click="category.onSelected">{ category.name | prettyCat }</a>
@@ -38,8 +40,8 @@
 
                 <div class="cards">
                     <h5>Your cards</h5>
-                    <span class="italics" rv-if="game.waitingCard">Waiting for opponents to pick...</span>
-                    <span rv-if="game.pickingCard">Pick the card you think has the <span rv-if="game.highGood">highest</span> <span rv-unless="game.highGood">lowest</span><span class="italics">{ game.activeCategory.name | lowercase }</span></span>
+                    <span class="italics pink-text" rv-if="game.waitingCard">Waiting for opponents to pick...</span>
+                    <span rv-if="game.pickingCard" class="pink-text"><i class="small material-icons">error</i>Pick the card you think has the <span rv-if="game.highGood">highest</span> <span rv-unless="game.highGood">lowest</span><span class="italics">{ game.activeCategory.name | prettyCat | lowercase }</span></span>
                     <div class="row">
                         <div class="col s12 m6 l4" rv-each-card="game._hand">
                             <div class="dd-card card small waves-effect waves-block waves-light" >
@@ -50,9 +52,9 @@
                                     <span class="card-title grey-text text-darken-4">{ card.name }<i class="material-icons right">close</i></span>
                                     <p>{ card.description }</p>
                                 </div>
-                                <div class="card-action" rv-if="game.pickingCard">
-                                    <a href="javascript:void(0)" rv-on-click="card.onSelected">Play</a>
-                                </div>
+                                <a class="card-action play-card waves-effect waves-teal" rv-if="game.pickingCard" href="javascript:void(0)" rv-on-click="card.onSelected">
+                                    Play
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -62,7 +64,7 @@
 
         <script id="deck-list-template" type="text/html">
             <div class="collection" id="deck-list">
-                <div class="collection-header"><h4>Select Card Deck</h4></div>
+                <div class="collection-header"><h5>Select Card Deck</h5></div>
                 <a href="javascript:void(0)" class="collection-item" rv-each-deck="decks.decks" rv-on-click="decks.onSelected">
                     <span class="title">{ deck.name }</span>
                 </a>
@@ -72,7 +74,12 @@
         <script id="lobby-template" type="text/html">
             <div class="container">
                 <div class="section center-btn">
+                    <h4>Waiting for players</h4>
                     <a id="lobby-ready" class="center-align valign waves-effect waves-light btn-large">Click when ready</a>
+
+                    <p>
+                        The game will continue when all players are ready or the room is full.
+                    </p>
                 </div>
             </div>
         </script>
@@ -95,7 +102,9 @@
                 <h4>About</h4>
                 <p>
                     Created as part of GovHack 2015 by <a href="https://github.com/DataDecks" target="_blank">Arcton</a>, from Hamilton, New Zealand.
-                    Data from: <a href="http://stats.govt.nz">Statistics New Zealand</a> used under a CC-BY-3.0 NZ license, <a target="_blank" href="https://www.niwa.co.nz/education-and-training/schools/resources/climate/summary">NIWA climate data</a>.
+                    Data from: <a href="http://stats.govt.nz">Statistics New Zealand</a> (used under a CC-BY-3.0 NZ license),
+                    <a target="_blank" href="https://www.niwa.co.nz/education-and-training/schools/resources/climate/summary">NIWA climate data</a>,
+                    and <a href="http://www.parliament.nz/en-nz/MPP/MPs/Expenses">NZ Parliament</a>.
                 </p>
             </div>
             <div class="modal-footer">
@@ -108,7 +117,12 @@
                 <h4>How to play</h4>
                 <p>
                     Welcome to DataDecks!
-                    Rules are coming soon. For now, explore the game and have fun!
+                </p>
+
+                <p>
+                    DataDecks is a card game based on a range of data about New Zealand.
+                    Once in a game, you'll be presented with a list of data categories and the three 'cards' that are currently in your hand.
+                    The aim of the game is to play the card that you think will have the highest value for the category that has been selected.
                 </p>
             </div>
             <div class="modal-footer">

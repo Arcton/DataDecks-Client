@@ -1,16 +1,15 @@
-.categories {
-    h5 {
-        font-size: 1em;
-        text-transform: uppercase;
-        font-weight: 700;
-        text-align: center;
+h5 {
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
 
-        &+ * {
-            text-align: center;
-            display: block;
-        }
+    &+ * {
+        text-align: center;
+        display: block;
     }
 }
+
 
 .italics {
     font-style: italic;
@@ -34,4 +33,8 @@
 
 .menu .score {
     display: none;
+}
+
+span i {
+    vertical-align: middle;
 }
