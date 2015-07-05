@@ -438,11 +438,12 @@ function showRoundWinner(cards) {
         tr.appendChild(td1);
         tr.appendChild(td2);
 
-        td1.innerHTML = card.name;
-        td2.innerHTML = card.value;
+        td1.innerHTML += card.name;
+        td2.innerHTML += card.value;
 
         if (parseFloat(card.value) == best) {
             tr.classList.add('winner');
+            td2.innerHTML += "<i class='tiny material-icons'>stars</i>"
         }
 
         tbody.appendChild(tr);
