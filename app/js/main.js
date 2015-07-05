@@ -158,7 +158,8 @@ Game.states = {
     PRESTART: 0,
     DECKLIST: 1,
     LOBBY: 2,
-    PLAYING: 3
+    PLAYING: 3,
+    OVER: 4
 }
 
 function Decks(deckArray) {
@@ -299,13 +300,24 @@ function connect(server) {
                     }
 
                     break;
+                case "winner":
+                    // A winner has been decided
+                    if (window.game.state === Game.states.PLAYING) {
+                        window.game.state = Game.states.OVER;
+                        showWinner(data.players, data.reason);
+                    }
+
+                    break;
             }
         };
 
         socket.onclose = function() {
                 console.log("socket closed");
-                showMenu();
-                game = null;
+
+                if (window.game.state != Game.states.OVER) {
+                    window.game.state = Game.states.OVER;
+                    showWinner([], "kick");
+                }
         };
 
         return socket;
@@ -437,6 +449,39 @@ function showRoundWinner(cards) {
     });
 
     table.appendChild(tbody);
+
+    $(modal).openModal();
+}
+
+function showWinner(winners, reason) {
+    var modal = document.getElementById('winnerModal');
+
+    var won = false;
+
+    if (reason == "kick") {
+        winnerText = "Something went wrong :(";
+    } else {
+        $.each(winners, function(key, player) {
+            if (player == window.game.playerId) {
+                won = true;
+                return false;
+            }
+        });
+
+        var winnerText;
+
+        if (won) {
+            if (winners.length > 1) {
+                winnerText = "You tied!";
+            } else {
+                winnerText = "You won!";
+            }
+        } else {
+            winnerText = "Game over - you lost";
+        }
+    }
+
+    document.getElementById('winner-title').innerHTML = winnerText;
 
     $(modal).openModal();
 }
