@@ -6,6 +6,7 @@ $(function() {
 });
 
 WEBSOCKET_URI = "ws://localhost:8080";
+//WEBSOCKET_URI = "ws://ec2-52-10-25-58.us-west-2.compute.amazonaws.com:80";
 
 rivets.configure({
 
@@ -29,15 +30,17 @@ rivets.formatters.prettyCat = function(val) {
 }
 
 rivets.formatters['='] = function (value, arg) {
-  return value == arg;
+    return value == arg;
 }
 
 rivets.formatters.not = function (value) {
-  return !value;
+    return !value;
 }
 
 rivets.formatters.lowercase = function (value) {
-  return value.toLowerCase();
+    if (value !== undefined) {
+        return value.toLowerCase();
+    }
 }
 
 var game = null;
@@ -107,6 +110,7 @@ function Game(socket) {
     }
 
     this.startCardPick = function() {
+        console.log("CARD PICK START");
         this.pickingCat = false;
         this.waitingCat = false;
 
@@ -124,6 +128,7 @@ function Game(socket) {
     }
 
     this.setCategory = function(catId, highGood) {
+        console.log("SETTING CAT");
         for (var i = 0; i < this.activeDeck.categories.length; i++) {
 
             if (this.activeDeck.categories[i].id === catId) {
