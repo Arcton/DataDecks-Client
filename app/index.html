@@ -38,16 +38,20 @@
 
                 <div class="cards">
                     <h5>Your cards</h5>
-                    <div class="card left waves-effect waves-block waves-light" rv-each-card="game._hand">
-                        <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">{ card.name }</span>
-                        </div>
-                        <div class="card-reveal">
-                            <span class="card-title grey-text text-darken-4">{ card.name }<i class="material-icons right">close</i></span>
-                            <p>{ card.description }</p>
-                        </div>
-                        <div class="card-action" rv-if="game.pickingCard">
-                            <a href="javascript:void(0)" rv-on-click="card.onSelected">Play</a>
+                    <div class="row">
+                        <div class="col s12 m6 l4" rv-each-card="game._hand">
+                            <div class="dd-card card small waves-effect waves-block waves-light" >
+                                <div class="card-content activator">
+                                    <span class="card-title activator grey-text text-darken-4">{ card.name }<i class="material-icons right">info</i></span>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4">{ card.name }<i class="material-icons right">close</i></span>
+                                    <p>{ card.description }</p>
+                                </div>
+                                <div class="card-action" rv-if="game.pickingCard">
+                                    <a href="javascript:void(0)" rv-on-click="card.onSelected">Play</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,7 +92,7 @@
             <div class="modal-content">
                 <h4>About</h4>
                 <p>
-                    Created as part of GovHack 2015 by <a href="https://github.com/Arcton" target="_blank">Arcton</a>, from Hamilton, New Zealand.
+                    Created as part of GovHack 2015 by <a href="https://github.com/DataDecks" target="_blank">Arcton</a>, from Hamilton, New Zealand.
                     Data from <a href="http://stats.govt.nz">Statistics New Zealand</a> used under a CC-BY-3.0 NZ license.
                 </p>
             </div>

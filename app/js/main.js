@@ -177,9 +177,10 @@ function Decks(deckArray) {
     }
 }
 
-function Card(name, id) {
+function Card(name, id, description) {
     this.name = name;
     this.id = id;
+    this.description = description;
 
     this.onSelected = function(event, model) {
         window.game.pickCard(model.card.id);
@@ -259,7 +260,7 @@ function connect(server) {
                     }
 
                     if (window.game.state === Game.states.PLAYING) {
-                        window.game.addCard(new Card(data.card, data.id));
+                        window.game.addCard(new Card(data.card, data.id, data.description));
                     }
 
                     break;
