@@ -36,6 +36,10 @@ rivets.formatters.not = function (value) {
   return !value;
 }
 
+rivets.formatters.lowercase = function (value) {
+  return value.toLowerCase();
+}
+
 var game = null;
 
 var ui = {
@@ -97,6 +101,9 @@ function Game(socket) {
     this.startCatPick = function() {
         this.pickingCat = true;
         this.waitingCat = false;
+
+        this.waitingCard = false;
+        this.pickingCard = false;
     }
 
     this.startCardPick = function() {

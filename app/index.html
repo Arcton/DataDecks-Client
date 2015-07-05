@@ -38,6 +38,8 @@
 
                 <div class="cards">
                     <h5>Your cards</h5>
+                    <span class="italics" rv-if="game.waitingCard">Waiting for opponents to pick...</span>
+                    <span rv-if="game.pickingCard">Pick the card you think has the <span rv-if="game.highGood">highest</span> <span rv-unless="game.highGood">lowest</span><span class="italics">{ game.activeCategory.name | lowercase }</span></span>
                     <div class="row">
                         <div class="col s12 m6 l4" rv-each-card="game._hand">
                             <div class="dd-card card small waves-effect waves-block waves-light" >
@@ -93,7 +95,7 @@
                 <h4>About</h4>
                 <p>
                     Created as part of GovHack 2015 by <a href="https://github.com/DataDecks" target="_blank">Arcton</a>, from Hamilton, New Zealand.
-                    Data from <a href="http://stats.govt.nz">Statistics New Zealand</a> used under a CC-BY-3.0 NZ license.
+                    Data from: <a href="http://stats.govt.nz">Statistics New Zealand</a> used under a CC-BY-3.0 NZ license, <a target="_blank" href="https://www.niwa.co.nz/education-and-training/schools/resources/climate/summary">NIWA climate data</a>.
                 </p>
             </div>
             <div class="modal-footer">

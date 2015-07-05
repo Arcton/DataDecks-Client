@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     bower = require('gulp-bower'),
     clean = require('gulp-clean'),
     runSequence = require('run-sequence'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    ghPages = require('gulp-gh-pages');
 
 var config = {
     srcPath: 'app',
@@ -56,4 +57,17 @@ gulp.task('scripts', function() {
   config.srcPath + '/js/**/*.js'])
       .pipe(concat('main.js'))
       .pipe(gulp.dest(config.destPath));
+});
+
+gulp.task('deploy', function(callback) {
+  return  runSequence('build', 'ghpage',
+                callback);
+});
+
+gulp.task('ghpage', function() {
+  return gulp.src('./out/**/*')
+        .pipe(ghPages({
+        remoteUrl: "git@github.com:DataDecks/datadecks.github.io.git",
+        branch: "master"
+    }));
 });

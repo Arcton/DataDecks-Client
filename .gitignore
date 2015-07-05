@@ -42,3 +42,6 @@ node_modules
 
 #built site
 out/
+
+#gulp-gh-pages
+.publish/
